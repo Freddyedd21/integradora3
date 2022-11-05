@@ -40,4 +40,6 @@ public abstract class Users{
     public void setDateUs(LocalDate dateUs) {
         this.dateUs = dateUs;
     }
+
+    
 }

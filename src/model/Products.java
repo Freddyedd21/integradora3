@@ -6,13 +6,15 @@ import java.time.LocalTime;
 
 public abstract class Products{
     private String nameProduct;
+    private String idOwner;
     private String url;
     private LocalTime duration;
     private int reproductionNumber;
     
 
-    public Products(String nameProduct, String url, int hours, int minutes, int second, int reproductionNumber){
+    public Products(String nameProduct,  String idOwner, String url, int hours, int minutes, int second, int reproductionNumber){
         this.nameProduct=nameProduct;
+        this.idOwner = idOwner;
         this.url=url;
         this.duration= LocalTime.of(hours, minutes, second);
         this.reproductionNumber=reproductionNumber;
@@ -24,6 +26,16 @@ public abstract class Products{
 
     public void setNameProduct(String nameProduct) {
         this.nameProduct = nameProduct;
+    }
+
+    //-----------------------------------------------------------
+
+    public String getNameOwner() {
+        return idOwner;
+    }
+
+    public void setNameOwner(String idOwner) {
+        this.idOwner = idOwner;
     }
 
     //-----------------------------------------------------------

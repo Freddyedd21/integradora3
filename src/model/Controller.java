@@ -70,6 +70,7 @@ public class Controller{
                 case 2:
                 Users newPremium = new Premium(nickNameUs, idUs, hours, minutes, second, mostListenedGender, mostListenedArtist);
                 users.add(newPremium);
+                msj="new consumer premium created";
                 break;
             }
         }else{
@@ -79,17 +80,17 @@ public class Controller{
         return msj;
     }
 
-    public String createProducts(String nameProduct, String url, int minutes, int second, int reproductionNumber, String album, int musicGenderSelection, double saleValue, int numberSales, String depcription, int podcastsCategorySelection, int choose){
+    public String createProducts(String nameProduct, String idOwner, String url, int minutes, int second, int reproductionNumber, String album, int musicGenderSelection, double saleValue, int numberSales, String depcription, int podcastsCategorySelection, int choose){
         String msj="the product cant be added";
         switch(choose){
             case 1:
-             Products newSong = new Songs(nameProduct, url, minutes, second, reproductionNumber, album, musicGenderSelection, saleValue, numberSales);
+             Products newSong = new Songs(nameProduct, idOwner, url, minutes, second, reproductionNumber, album, musicGenderSelection, saleValue, numberSales);
              products.add(newSong);
              msj = "new song added";
             break;
 
             case 2:
-             Products newPodcast = new Podcasts(nameProduct, url, numberSales, minutes, second, reproductionNumber, depcription, podcastsCategorySelection);
+             Products newPodcast = new Podcasts(nameProduct, idOwner, url, numberSales, minutes, second, reproductionNumber, depcription, podcastsCategorySelection);
              products.add(newPodcast);
              msj = "new podcast added";
             break;
@@ -98,11 +99,27 @@ public class Controller{
 
     }
 
-    public String createPlayList(){
+    public String createPlayListToUs(String idUs, String nameList){
         String msj="";
-
+        int posIdUs=searchUserById(idUs);
+        if(posIdUs!=-1){
+            if(users.get(posIdUs) instanceof Consumers){
+                PlayList newPlayList = new PlayList(nameList);
+                if(users.get(posIdUs) instanceof Standart){
+                    msj=((Standart)(users.get(posIdUs))).addPlaylistStandart(newPlayList);
+                }else if(users.get(posIdUs) instanceof Premium){
+                    msj=((Premium)(users.get(posIdUs))).addPlaylistPremium(newPlayList);
+                }
+            }else{
+                msj="the user is not a consumer";
+            }
+        }else{
+            msj="the user is not created";
+        }
         return msj;
     }
+
+
     public int searchUserById(String idUs){
         int posIdUs=-1;
         boolean isFound=false;
@@ -117,5 +134,18 @@ public class Controller{
         return posIdUs;
     }
     
+    public int searchUserByNick(String nickNameUs){
+        int posNickUs=-1;
+        boolean isFound=false;
+        for(int i = 0; i < users.size() && !isFound; i++){
+            if(users.get(i)!=null){
+                if(users.get(i).getNickNameUs().equals(nickNameUs)){
+                    posNickUs = i;
+                    isFound=true;
+                }
+            }
+        }
+        return posNickUs;
+    }
 }
 
