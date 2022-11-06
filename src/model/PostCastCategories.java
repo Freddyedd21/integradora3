@@ -1,5 +1,5 @@
 package model;
 
 public enum PostCastCategories{
-    POLITICA, ENTRETENIMIENTO, VIDEOJUEGOS, MODA    
+    POLITICS, ENTERTAINMENT, VIDEOGAMES, FASHION    
 }

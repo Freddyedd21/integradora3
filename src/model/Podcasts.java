@@ -14,16 +14,16 @@ public class Podcasts extends Products{
         this.description=description;
         switch(podcastsCategorySelection){
             case 1:
-            this.category = PostCastCategories.ENTRETENIMIENTO;
+            this.category = PostCastCategories.POLITICS;
             break;
             case 2:
-            this.category = PostCastCategories.MODA;
+            this.category = PostCastCategories.ENTERTAINMENT;
             break;
             case 3:
-            this.category = PostCastCategories.POLITICA;
+            this.category = PostCastCategories.VIDEOGAMES;
             break;
             case 4:
-            this.category = PostCastCategories.VIDEOJUEGOS;
+            this.category = PostCastCategories.FASHION;
             break;
         }
        

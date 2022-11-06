@@ -80,19 +80,30 @@ public class Controller{
         return msj;
     }
 
-    public String createProducts(String nameProduct, String idOwner, String url, int minutes, int second, int reproductionNumber, String album, int musicGenderSelection, double saleValue, int numberSales, String depcription, int podcastsCategorySelection, int choose){
+    public String createProducts(String nameProduct, String idOwner, String url, int hours, int minutes, int second, int reproductionNumber, String album, int musicGenderSelection, double saleValue, int numberSales, String description, int podcastsCategorySelection, int choose){
         String msj="the product cant be added";
+        int posIdUs=searchUserById(idOwner);
         switch(choose){
             case 1:
-             Products newSong = new Songs(nameProduct, idOwner, url, minutes, second, reproductionNumber, album, musicGenderSelection, saleValue, numberSales);
-             products.add(newSong);
-             msj = "new song added";
+             if(users.get(posIdUs) instanceof Artist){
+                Products newSong = new Songs(nameProduct, idOwner, url, hours, minutes, second, reproductionNumber, album, musicGenderSelection, saleValue, numberSales);
+                products.add(newSong);
+                msj = "new song added";
+             }else{
+                msj="the entered id does not match an artist's id";
+             }
+             
             break;
 
             case 2:
-             Products newPodcast = new Podcasts(nameProduct, idOwner, url, numberSales, minutes, second, reproductionNumber, depcription, podcastsCategorySelection);
-             products.add(newPodcast);
-             msj = "new podcast added";
+            if(users.get(posIdUs) instanceof ContentCreators){
+                Products newPodcast = new Podcasts(nameProduct, idOwner, url, hours, minutes, second, reproductionNumber, description, podcastsCategorySelection);
+                products.add(newPodcast);
+                msj = "new podcast added";
+            }else{
+                msj="the entered id does not match an content creators's id"; 
+            }
+             
             break;
         }
         return msj;
@@ -146,6 +157,18 @@ public class Controller{
             }
         }
         return posNickUs;
+    }
+
+    public int verifyArtistOrCreatorsByid(String idOwner){
+        int match=0;
+        int posIdUs=searchUserById(idOwner);
+        if(users.get(posIdUs) instanceof Artist){
+            match=1;
+        }
+        if(users.get(posIdUs) instanceof ContentCreators){
+            match=2;
+        }
+        return match;
     }
 }
 

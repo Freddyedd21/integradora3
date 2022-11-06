@@ -9,8 +9,8 @@ public class Songs extends Products{
     private int musicGenderSelection;
     private int numberSales;
 
-    public Songs(String nameProduct, String idOwner, String url, int minutes, int second, int reproductionNumber, String album, int musicGenderSelection, double saleValue, int numberSales){
-        super(nameProduct, idOwner, url, 0, minutes, second, reproductionNumber);
+    public Songs(String nameProduct, String idOwner, String url, int hours, int minutes, int second, int reproductionNumber, String album, int musicGenderSelection, double saleValue, int numberSales){
+        super(nameProduct, idOwner, url, hours, minutes, second, reproductionNumber);
         this.album=album;
         switch(musicGenderSelection){
             case 1:
