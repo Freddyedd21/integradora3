@@ -25,4 +25,29 @@ public class Premium extends Consumers{
         msj="new play list added";
         return msj;
     }
+
+    public String addSongtoPlaylistPremium(Products newProductList, int posNameList){
+        String msj="the song cant be added";
+        msj=playLists.get(posNameList).addSong(newProductList);
+        return msj;
+    }
+
+    public String addPodcastToPlaylistPremium(Products newProductList, int posNameList){
+        String msj="the pod cast cant be added";
+        msj=playLists.get(posNameList).addSong(newProductList);
+        return msj;
+    }
+
+    public String removeSongtoPlaylistPremium(int posNameList, String nameProduct){
+        String msj="the song cant be remove";
+        msj=playLists.get(posNameList).removeSong(nameProduct);
+        return msj;
+    }
+
+    public String removePodCasttoPlaylistPremium(int posNameList, String nameProduct){
+        String msj="the pod cast cant be remove";
+        msj=playLists.get(posNameList).removePodcast(nameProduct);
+        return msj;
+    }
+
 }

@@ -2,6 +2,8 @@ package ui;
 
 import java.util.Scanner;
 
+import org.w3c.dom.NameList;
+
 import model.Artist;
 import model.Controller;
 
@@ -49,6 +51,8 @@ public class Main{
         "1. register usuary producer \n" +
         "2. register usuary consumer \n" +
         "3. create song and podcast \n" +
+        "4. create a user play list \n"+
+        "5. edit user play list \n"+
         "0. exit program";
     
     }
@@ -99,12 +103,16 @@ public class Main{
         int reproductionQuantityProducer=0; 
         //consumer params
         String mostListenedGender=""; String mostListenedArtist="";
+        //consumer standart param
+        int numberOfList=0;
         //audio products param
         String nameProduct=""; String idOwner=""; String url=""; int reproductionNumber=0;
         //songs param
         String album=""; int musicGenderSelection=0; double saleValue=0; int numberSales=0; 
         //podCast param
         String description=""; int podcastsCategorySelection=0;
+        //playList param
+        String nameList="";
 
         switch(option){
             case 1: 
@@ -112,11 +120,18 @@ public class Main{
             break; 
 
             case 2:
-                case2(msj, counter, nickNameUs, idUs, hours, minutes, second, mostListenedGender, mostListenedArtist, choose);
+                case2(msj, counter, nickNameUs, idUs, hours, minutes, second, mostListenedGender, mostListenedArtist, numberOfList, choose);
             break;
                 
             case 3:
                 case3(msj, counter, nameProduct, idOwner, url, hours, minutes, second, reproductionNumber, album, musicGenderSelection, saleValue, numberSales, description, podcastsCategorySelection, choose);
+            break;
+
+            case 4:
+                case4(msj, idUs, nameList, counter);
+            break;
+            case 5:
+                case5(msj, idUs, counter, nameList, choose, nameProduct, idOwner);
             break;
             case 0: 
                 System.out.println("Exit program.");
@@ -162,7 +177,7 @@ public class Main{
         
     }
 
-    public void case2(String msj, int counter, String nickNameUs, String idUs, int hours, int minutes, int second, String mostListenedGender, String mostListenedArtist, int choose){
+    public void case2(String msj, int counter, String nickNameUs, String idUs, int hours, int minutes, int second, String mostListenedGender, String mostListenedArtist, int numberOfList, int choose){
         System.out.println("type the nickname of the usuary");
         nickNameUs=reader.next();
         counter=controller.searchUserByNick(nickNameUs);
@@ -179,7 +194,7 @@ public class Main{
                     }
                 }while(choose !=1 && choose !=2);
 
-                msj=controller.createConsumerUser(nickNameUs, idUs, hours, minutes, second, mostListenedGender, mostListenedArtist, choose);
+                msj=controller.createConsumerUser(nickNameUs, idUs, hours, minutes, second, mostListenedGender, mostListenedArtist, numberOfList, choose);
                 System.out.println(msj);
             }else{
                 System.out.println("this id is already used by another usuary");
@@ -193,12 +208,14 @@ public class Main{
     }
 
     public void case3(String msj, int counter, String nameProduct, String idOwner, String url, int hours, int minutes, int second, int reproductionNumber, String album, int musicGenderSelection, double saleValue, int numberSales, String description, int podcastsCategorySelection, int choose){
-        System.out.println("type the name of the audio");
-        nameProduct=reader.next();
-        System.out.println("type the id of the owner of the audio");
-        idOwner=reader.next();
-        counter=controller.searchUserById(idOwner);
-        if(counter!=-1){
+     System.out.println("type the name of the audio");
+     nameProduct=reader.next();
+     counter=controller.verifyAudioProductByName(nameProduct);
+     if(counter==0){
+         System.out.println("type the id of the owner of the audio");
+         idOwner=reader.next();
+         counter=controller.searchUserById(idOwner);
+         if(counter!=-1){
                 do{
                   System.out.println("type 1 to create a song or type 2 to create a postcast");
                   choose=validateIntegerOption();
@@ -322,10 +339,107 @@ public class Main{
                     }
 
                 }
+            }else{
+             System.out.println("producer id not found");
+            }
         }else{
-            System.out.println("producer id not found");
+        System.out.println("this name is already used");
+      }
+    } 
+    
+    public void case4(String msj, String idUs, String nameList, int counter){
+        msj="";
+        System.out.println("type the name of the play list");
+        nameList=reader.next();
+        System.out.println("type the id of the consumer you want to add the list to");
+        idUs=reader.next();
+        counter=controller.searchPlayListByName(idUs, nameList);
+        if(counter==-1){
+            msj=controller.createPlayListToUs(idUs, nameList);
+           System.out.println(msj);
+        }else{
+            System.out.println("the name of the play list is already used");
         }
-    }    
+        
+    }
+
+    public void  case5(String msj, String idUs, int counter, String nameList, int choose, String nameProduct,String idOwner){
+        System.out.println("type the id of the user to edit his playlist");
+        idUs=reader.next();
+        counter=controller.searchUserById(idUs);
+        if(counter!=-1){
+            counter=controller.verifyConsumerByid(idUs);
+            if(counter==1){
+                System.out.println("type the name of the play list");
+                nameList=reader.next();
+                counter=controller.searchPlayListByName(idUs, nameList);
+                if(counter!=-1){
+                    do {
+                        System.out.println("what do you want to do \n"+
+                        "1) ADD SONG \n"+
+                        "2) ADD PODCAST \n"+
+                        "3) DELETE SONG \n"+
+                        "4) DELETE PODCAST");
+                        choose=validateIntegerOption();
+                        if(choose!=1 && choose!=2 && choose!=3 && choose!=4){
+                            System.out.println("invalid option try again");
+                        }
+                    } while (choose!=1 && choose!=2 && choose!=3 && choose!=4);
+                    if(choose==1){
+                        System.out.println("you selected ADD SONG, type the name of the song");
+                        nameProduct=reader.next();
+                        counter=controller.verifyAudioProductByName(nameProduct);
+                        if(counter==1){
+                            msj=controller.editPlayList(idUs, nameProduct, nameList, choose);
+                            System.out.println(msj);
+                        }else{
+                            System.out.println("the name of the song was not found");
+                        }
+                        
+
+                    }else if(choose==2){
+                        System.out.println("you selected ADD PODCAST, type the name of the podcast");
+                        nameProduct=reader.next();
+                        counter=controller.verifyAudioProductByName(nameProduct);
+                        if(counter==2){
+                            msj=controller.editPlayList(idUs, nameProduct, nameList, choose);
+                            System.out.println(msj);
+                        }else{
+                            System.out.println("the name of the podcast was not found");
+                        }
+                    }else if(choose==3){
+                        System.out.println("you selected DELETE SONG, type the name of the song");
+                        nameProduct=reader.next();
+                        counter=controller.verifyAudioProductByName(nameProduct);
+                        if(counter==1){
+                            msj=controller.editPlayList(idUs, nameProduct, nameList, choose);
+                            System.out.println(msj);
+                        }else{
+                            System.out.println("the name of the song was not found");
+                        }
+                    }else if(choose==4){
+                        System.out.println("you selected DELETE PODCAST, type the name of the podcast");
+                        nameProduct=reader.next();
+                        counter=controller.verifyAudioProductByName(nameProduct);
+                        if(counter==2){
+                            msj=controller.editPlayList(idUs, nameProduct, nameList, choose);
+                            System.out.println(msj);
+                        }else{
+                            System.out.println("the name of the podcast was not found");
+                        }
+                    }
+                    
+                }else{
+                    System.out.println("play list not found");
+                }
+
+            }else{
+                System.out.println("this user is not a consumer"); 
+            }
+        }else{
+            System.out.println("user id not found");
+        }
+    }
     
 
 

@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.lang.annotation.Retention;
 import java.time.LocalTime;
 
 public class Controller{
@@ -56,13 +57,13 @@ public class Controller{
         return msj;
     }
 
-    public String createConsumerUser(String nickNameUs, String idUs, int hours, int minutes, int second, String mostListenedGender, String mostListenedArtist, int choose){
+    public String createConsumerUser(String nickNameUs, String idUs, int hours, int minutes, int second, String mostListenedGender, String mostListenedArtist, int numberOfList, int choose){
         String msj="the user cant be added";
         int posIdUs=searchUserById(idUs);
         if(posIdUs==-1){
             switch(choose){
                 case 1:
-                 Users newStandart = new Standart(nickNameUs, idUs, hours, minutes, second, mostListenedGender, mostListenedArtist);
+                 Users newStandart = new Standart(nickNameUs, idUs, hours, minutes, second, mostListenedGender, mostListenedArtist, numberOfList);
                  users.add(newStandart);
                  msj="new consumer standart created";
                 break;
@@ -131,6 +132,7 @@ public class Controller{
     }
 
 
+
     public int searchUserById(String idUs){
         int posIdUs=-1;
         boolean isFound=false;
@@ -162,13 +164,132 @@ public class Controller{
     public int verifyArtistOrCreatorsByid(String idOwner){
         int match=0;
         int posIdUs=searchUserById(idOwner);
-        if(users.get(posIdUs) instanceof Artist){
-            match=1;
-        }
-        if(users.get(posIdUs) instanceof ContentCreators){
-            match=2;
+        if(posIdUs!=-1){
+            if(users.get(posIdUs) instanceof Artist){
+                match=1;
+            }
+            if(users.get(posIdUs) instanceof ContentCreators){
+                match=2;
+            }
         }
         return match;
     }
+
+    public int verifyConsumerByid(String idUs){
+        int match=0;
+        int posIdUs=searchUserById(idUs);
+        if(posIdUs!=-1){
+            if(users.get(posIdUs) instanceof Standart){
+                match=1;
+            }
+            if(users.get(posIdUs) instanceof Premium){
+                match=1;
+            }
+        }
+        return match;
+    }
+
+    public int verifyAudioProductByName(String nameProduct){
+        int match=0;
+        int posNameProd=searchAudioProductByName(nameProduct);
+        if(posNameProd!=-1){
+            if(products.get(posNameProd) instanceof Songs){
+                match=1;
+            }
+            if(products.get(posNameProd) instanceof Podcasts){
+                match=2;
+            }
+        }
+        return match;
+    }
+    
+
+    public String editPlayList(String idUs, String nameProduct, String nameList, int choose){
+        String msj="";
+        int posIdUs=searchUserById(idUs);
+        int posNameList=searchPlayListByName(idUs, nameList);
+        int posNameProd=searchAudioProductByName(nameProduct);
+        Products newProductList=products.get(posNameProd);
+        switch(choose){
+            case 1:
+               
+               if(users.get(posIdUs) instanceof Standart){
+                msj=((Standart)(users.get(posIdUs))).addSongtoPlaylistStandart(newProductList, posNameList);
+               }
+               if(users.get(posIdUs) instanceof Premium){
+                msj=((Premium)(users.get(posIdUs))).addSongtoPlaylistPremium(newProductList, posNameList);
+               }
+            break;
+            case 2:
+               if(users.get(posIdUs) instanceof Standart){
+                msj=((Standart)(users.get(posIdUs))).addPodcastToPlaylistStandart(newProductList, posNameList);
+               }
+               if(users.get(posIdUs) instanceof Premium){
+                msj=((Premium)(users.get(posIdUs))).addPodcastToPlaylistPremium(newProductList, posNameList);
+               }
+            case 3:
+               if(users.get(posIdUs) instanceof Standart){
+                 msj=((Standart)(users.get(posIdUs))).removeSongtoPlaylistStandart(posNameList, nameProduct);
+                }
+               if(users.get(posIdUs) instanceof Premium){
+                 msj=((Premium)(users.get(posIdUs))).removeSongtoPlaylistPremium(posNameList, nameProduct);
+                }
+            break;
+            case 4:
+               if(users.get(posIdUs) instanceof Standart){
+                 msj=((Standart)(users.get(posIdUs))).removePodCasttoPlaylistStandart(posNameList, nameProduct);
+               }
+              if(users.get(posIdUs) instanceof Premium){
+                 msj=((Premium)(users.get(posIdUs))).removeSongtoPlaylistPremium(posNameList, nameProduct);
+               }
+            break;
+
+        }
+        return msj;
+    }
+
+    public int searchPlayListByName(String idUs, String nameList){
+        int posIdUs=searchUserById(idUs);
+        int posNameList=-1;
+        boolean isFound=false;
+        if(users.get(posIdUs) instanceof Standart){
+            for(int i=0; i<((Standart)(users.get(posIdUs))).getNumberOfList() && !isFound; i++){
+                if(((Standart)(users.get(posIdUs))).getPlayLists().get(i).getNameList().equals(nameList)){
+                    posNameList=i;
+                    isFound=true;
+                }
+            }
+        }
+
+        if(users.get(posIdUs) instanceof Premium){
+            for(int i=0; i<((Premium)(users.get(posIdUs))).getPlayLists().size() && !isFound; i++){
+                if(((Premium)(users.get(posIdUs))).getPlayLists().get(i).getNameList().equals(nameList)){
+                    posNameList=i;
+                    isFound=true;
+                }
+            }
+        }
+        return  posNameList;
+        
+    }
+
+
+    public int searchAudioProductByName(String nameProduct){
+        int posNameProd=-1;
+        boolean isFound=false;
+        for(int i = 0; i < products.size() && !isFound; i++){
+            if(products.get(i)!=null){
+                if(products.get(i).getNameProduct().equals(nameProduct)){
+                    posNameProd = i;
+                    isFound=true;
+                }
+            }
+        }
+        return posNameProd;
+    }
+
+
+   
+
 }
 

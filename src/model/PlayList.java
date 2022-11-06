@@ -46,8 +46,47 @@ public class PlayList{
 
     //-----------------------------------------------------------
 
-   
+   public String addSong(Products newProductList){
+    String msj="the song has been added";
+    productsList.add(newProductList);
+    return msj;
+   }
 
+   public String addPodCast(Products newProductList){
+    String msj="the podCast has been added";
+    productsList.add(newProductList);
+    return msj;
+   }
+
+   public String removeSong(String nameProduct){
+    String msj="the song has been remove";
+    int posAudioProductList=searchAudioProductByName(nameProduct);
+    productsList.remove(posAudioProductList);
+    return msj;
+   }
+
+   public String removePodcast(String nameProduct){
+    String msj="the podcast has been remove";
+    int posAudioProductList=searchAudioProductByName(nameProduct);
+    productsList.remove(posAudioProductList);
+    return msj;
+   }
+
+
+
+   public int searchAudioProductByName(String nameProduct){
+    int posNameProd=-1;
+    boolean isFound=false;
+    for(int i = 0; i < productsList.size() && !isFound; i++){
+        if(productsList.get(i)!=null){
+            if(productsList.get(i).getNameProduct().equals(nameProduct)){
+                posNameProd = i;
+                isFound=true;
+            }
+        }
+    }
+    return posNameProd;
+}
 
 
 }
