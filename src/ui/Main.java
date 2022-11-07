@@ -1,10 +1,6 @@
 package ui;
 
 import java.util.Scanner;
-
-import org.w3c.dom.NameList;
-
-import model.Artist;
 import model.Controller;
 
 public class Main{
@@ -12,6 +8,9 @@ public class Main{
     private Scanner reader;
     private Controller controller;
 
+    /**
+     * Main:is the constructor of the main method that generates the controller object and Scanner.
+     */
     public Main(){
         reader=new Scanner(System.in);
       
@@ -19,14 +18,25 @@ public class Main{
 
     }
 
-
+    /**
+	 * getReader: is the method that gets the object type Scanner
+	 * @return reader: Scanner=>Scanner type object
+	 */
     public Scanner getReader(){
         return this.reader;
     }
+
+    /**
+     * setReader: is the method that sets the object type Scanner
+     * @param reader: Scanner=> is the variable type Scanner that set the object scanner
+     */
     public void setReader(Scanner reader){
         this.reader=reader;
     }
 
+    /**
+     * @param args
+     */
     public static void main(String[] args){
         Main main=new Main();
         int option = -1; 
@@ -43,6 +53,10 @@ public class Main{
 
     
 
+    /**
+     * printMenu: print the menu of the option of the program
+     * @return the menu of the program
+     */
     public String printMenu(){
         return
         "<< --------------------------------------------------------------------- >>\n" +
@@ -56,6 +70,11 @@ public class Main{
         "0. exit program";
     
     }
+
+    /**
+     * validateIntegerOption: validate a integer input
+     * @return option: int=> is the response if the input is a integer or not. 
+     */
     public int validateIntegerOption(){
         int option = 0; 
 
@@ -69,7 +88,10 @@ public class Main{
 
         return option; 
     }
-
+     /**
+     * validateDoubleOption: validate a double input
+     * @return option: double=> is the response if the input is a double or not. 
+     */
     public double validateDoubleOption(){
         double option = 0; 
 
@@ -84,6 +106,10 @@ public class Main{
         return option; 
     }
 
+    /**
+     * getOptionShowMenu: offers the option to choose the option that requires the user
+     * @return option: int=> is the selected option of the user
+     */
     public int getOptionShowMenu(){
         int option = 0; 
         System.out.println(printMenu());
@@ -92,6 +118,11 @@ public class Main{
 
         return option; 
     }
+
+    /**
+     * executeOption: execute the options of the program and receive the necessary parameters.
+     * @param option: int=> is the selected option of the user
+     */
     public void executeOption(int option){
         //tools cheack
         String msj=""; int counter=0; int choose=0;
@@ -143,6 +174,20 @@ public class Main{
         }
     }
 
+    /**
+     * case1: register usuary producer.
+     * @param msj: String=> method confirmation message.
+     * @param counter: int=> validation tool.
+     * @param nickNameUs: String=> user's nickname.
+     * @param idUs: String=> user's id.
+     * @param nameProducer: String=> producer's name.
+     * @param URLproducer: String=> producer's url image.
+     * @param reproductionQuantityProducer: int=> number of playback replays from the producer.
+     * @param hours: int=> number of hours of playback.
+     * @param minutes: int=> number of minutes of playback.
+     * @param second: int=> number of second of playback.
+     * @param choose: int=> select tool.
+     */
     public void case1(String msj, int counter, String nickNameUs, String idUs, String nameProducer, String URLproducer, int reproductionQuantityProducer, int hours, int minutes, int second, int choose){
         System.out.println("type the nickname of the usuary");
         nickNameUs=reader.next();
@@ -177,6 +222,20 @@ public class Main{
         
     }
 
+    /**
+     * case2: register usuary consumer.
+     * @param msj: String=> method confirmation message.
+     * @param counter: int=> validation tool.
+     * @param nickNameUs: String=> user's nickname.
+     * @param idUs: String=> user's id.
+     * @param hours: int=> number of hours of playback.
+     * @param minutes: int=> number of minutes of playback.
+     * @param second: int=> number of second of playback.
+     * @param mostListenedGender: String=>most played music genre.
+     * @param mostListenedArtist: String=>most played music artist.
+     * @param numberOfList: int=> number of playlists
+     * @param choose: int=> select tool.
+     */
     public void case2(String msj, int counter, String nickNameUs, String idUs, int hours, int minutes, int second, String mostListenedGender, String mostListenedArtist, int numberOfList, int choose){
         System.out.println("type the nickname of the usuary");
         nickNameUs=reader.next();
@@ -207,6 +266,25 @@ public class Main{
         
     }
 
+    /**
+     * case3: register audio product.
+     * @param msj: String=> method confirmation message.
+     * @param counter: int=> validation tool.
+     * @param nameProduct: String=> product's name.
+     * @param idOwner: String=> owner's name.
+     * @param url: String=> product's url image. 
+     * @param hours: int=> hours of duration.
+     * @param minutes: int=> minutes of duration.
+     * @param second: int=> seconds of duration.
+     * @param reproductionNumber: int=> number of playback replays from the product.
+     * @param album: String=> album to which a song belongs.
+     * @param musicGenderSelection: int=> song genre selection.
+     * @param saleValue: int=> sale value of the song.
+     * @param numberSales: int=> number of sales of a song.
+     * @param description: String=> podcast description.
+     * @param podcastsCategorySelection: int=> podcast category selection.
+     * @param choose: int=> select tool.
+     */
     public void case3(String msj, int counter, String nameProduct, String idOwner, String url, int hours, int minutes, int second, int reproductionNumber, String album, int musicGenderSelection, double saleValue, int numberSales, String description, int podcastsCategorySelection, int choose){
      System.out.println("type the name of the audio");
      nameProduct=reader.next();
@@ -347,6 +425,13 @@ public class Main{
       }
     } 
     
+    /**
+     * case4: create playlist.
+     * @param msj: String=> method confirmation message.
+     * @param idUs: String=> consumer user's id.
+     * @param nameList: String=> name of the playList.
+     * @param counter: int=> validation tool.
+     */
     public void case4(String msj, String idUs, String nameList, int counter){
         msj="";
         System.out.println("type the name of the play list");
@@ -363,6 +448,16 @@ public class Main{
         
     }
 
+    /**
+     * case5: edit playlist.
+     * @param msj: String=> method confirmation message.
+     * @param idUs: String=> consumer user's id.
+     * @param counter: int=> validation tool.
+     * @param nameList: String=> name of the playList.
+     * @param choose: int=> select tool.
+     * @param nameProduct: String=> product's name.
+     * @param idOwner: String=> producer user's id.
+     */
     public void  case5(String msj, String idUs, int counter, String nameList, int choose, String nameProduct,String idOwner){
         System.out.println("type the id of the user to edit his playlist");
         idUs=reader.next();

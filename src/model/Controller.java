@@ -8,31 +8,59 @@ public class Controller{
     private ArrayList<Users> users;
     private ArrayList<Products> products;
 
+    /**
+     * Controller: is the constructor of the class Controller tha contain the arrayslist of product and users
+     */
     public Controller(){
         users = new ArrayList<Users>(10);
         products = new ArrayList<Products>(10);
     }
 
+    /**
+     * @return users: arraylist<Users> => get the array list of users
+     */
     public ArrayList<Users> getUsers() {
         return users;
     }
 
+    /**
+     * @param users arraylist<Users> => set the array list of users
+     */
     public void setUsers(ArrayList<Users> users) {
         this.users = users;
     }
 
     //-----------------------------------------------------------
 
+    /**
+     * @return products: arraylist<Products> => get the array list of products
+     */
     public ArrayList<Products> getProducts() {
         return products;
     }
 
+    /**
+     * @param products arraylist<Products> => set the array list of products
+     */
     public void setProducts(ArrayList<Products> products) {
         this.products = products;
     }
 
     //-----------------------------------------------------------
 
+    /**
+     * createProductorUser: create user productor.
+     * @param nickNameUs: String=> user's nickname.
+     * @param idUs: String=> user's id.
+     * @param nameProducer: String=> producer's name.
+     * @param URLproducer: String=> producer's url image.
+     * @param reproductionQuantityProducer: int=> number of playback replays from the producer.
+     * @param hours: int=> number of hours of playback.
+     * @param minutes: int=> number of minutes of playback.
+     * @param second: int=> number of second of playback.
+     * @param choose: int=> select tool.
+     * @return msj: String=> confirmation message.
+     */
     public String createProductorUser(String nickNameUs, String idUs, String nameProducer, String URLproducer, int reproductionQuantityProducer, int hours, int minutes, int second, int choose){
         String msj="the user cant be added";
         int posIdUs=searchUserById(idUs);
@@ -57,6 +85,19 @@ public class Controller{
         return msj;
     }
 
+    /**
+     * createConsumerUser: create user consumer.
+     * @param nickNameUs: String=> user's nickname.
+     * @param idUs: String=> user's id.
+     * @param hours: int=> number of hours of playback.
+     * @param minutes: int=> number of minutes of playback.
+     * @param second: int=> number of second of playback.
+     * @param mostListenedGender: String=>most played music genre.
+     * @param mostListenedArtist: String=>most played music artist.
+     * @param numberOfList: int=> number of playlists
+     * @param choose: int=> select tool.
+     * @return msj: String=> confirmation message.
+     */
     public String createConsumerUser(String nickNameUs, String idUs, int hours, int minutes, int second, String mostListenedGender, String mostListenedArtist, int numberOfList, int choose){
         String msj="the user cant be added";
         int posIdUs=searchUserById(idUs);
@@ -81,6 +122,24 @@ public class Controller{
         return msj;
     }
 
+    /**
+     * createProducts: create audio product.
+     * @param nameProduct: String=> product's name.
+     * @param idOwner: String=> owner's name.
+     * @param url: String=> product's url image. 
+     * @param hours: int=> hours of duration.
+     * @param minutes: int=> minutes of duration.
+     * @param second: int=> seconds of duration.
+     * @param reproductionNumber: int=> number of playback replays from the product.
+     * @param album: String=> album to which a song belongs.
+     * @param musicGenderSelection: int=> song genre selection.
+     * @param saleValue: int=> sale value of the song.
+     * @param numberSales: int=> number of sales of a song.
+     * @param description: String=> podcast description.
+     * @param podcastsCategorySelection: int=> podcast category selection.
+     * @param choose: int=> select tool.
+     * @return msj: String=> confirmatio message.
+     */
     public String createProducts(String nameProduct, String idOwner, String url, int hours, int minutes, int second, int reproductionNumber, String album, int musicGenderSelection, double saleValue, int numberSales, String description, int podcastsCategorySelection, int choose){
         String msj="the product cant be added";
         int posIdUs=searchUserById(idOwner);
@@ -111,6 +170,12 @@ public class Controller{
 
     }
 
+    /**
+     * createPlayListToUs: create a play list to a specifically to a usuary
+     * @param idUs: String=> consumer user's id.
+     * @param nameList: String=> name of the playList.
+     * @return msj: String=> confirmatio message.
+     */
     public String createPlayListToUs(String idUs, String nameList){
         String msj="";
         int posIdUs=searchUserById(idUs);
@@ -133,6 +198,11 @@ public class Controller{
 
 
 
+    /**
+     * searchUserById: search for a user by id.
+     * @param idUs: String=> user's id.
+     * @return posIdUs: int=> user position in array list.
+     */
     public int searchUserById(String idUs){
         int posIdUs=-1;
         boolean isFound=false;
@@ -147,6 +217,11 @@ public class Controller{
         return posIdUs;
     }
     
+    /**
+     * searchUserByNick: search for a user by nickName.
+     * @param nickNameUs: String=> user's nickName.
+     * @return posNickUs: int=> user position in array list.
+     */
     public int searchUserByNick(String nickNameUs){
         int posNickUs=-1;
         boolean isFound=false;
@@ -161,6 +236,11 @@ public class Controller{
         return posNickUs;
     }
 
+    /**
+     * verifyArtistOrCreatorsByid: check the type of producer users by id (whether they are artists or content creators).
+     * @param idOwner: String=> user id.
+     * @return match: int=> confirmation variable.
+     */
     public int verifyArtistOrCreatorsByid(String idOwner){
         int match=0;
         int posIdUs=searchUserById(idOwner);
@@ -175,6 +255,11 @@ public class Controller{
         return match;
     }
 
+    /**
+     * verifyConsumerByid: check the type of consuemr users by id (whether they are Stadart or premium consumers).
+     * @param idUs: String=> user id.
+     * @return match: int=> confirmation variable.
+     */
     public int verifyConsumerByid(String idUs){
         int match=0;
         int posIdUs=searchUserById(idUs);
@@ -189,6 +274,11 @@ public class Controller{
         return match;
     }
 
+    /**
+     * verifyAudioProductByName: check the type of the AudioProduct by the name (whether they are Songs or Podcasts audio products).
+     * @param nameProduct: String=> is the name of the audioProduct.
+     * @return match: int=> confirmation variable.
+     */
     public int verifyAudioProductByName(String nameProduct){
         int match=0;
         int posNameProd=searchAudioProductByName(nameProduct);
@@ -204,6 +294,14 @@ public class Controller{
     }
     
 
+    /**
+     * editPlayList: method that is responsible for editing the playlist
+     * @param idUs: String=> user id.
+     * @param nameProduct: String=> is the name of the audioProduct.
+     * @param nameList: String=> it the name of the play list
+     * @param choose: int=> select tool.
+     * @return msj: String=> confirmation message.
+     */
     public String editPlayList(String idUs, String nameProduct, String nameList, int choose){
         String msj="";
         int posIdUs=searchUserById(idUs);
@@ -248,6 +346,12 @@ public class Controller{
         return msj;
     }
 
+    /**
+     * searchPlayListByName: search for a play list by name.
+     * @param idUs: String=> user id.
+     * @param nameList: String=> it the name of the play list
+     * @return posNameList: int=> play list position in array list.
+     */
     public int searchPlayListByName(String idUs, String nameList){
         int posIdUs=searchUserById(idUs);
         int posNameList=-1;
@@ -274,6 +378,11 @@ public class Controller{
     }
 
 
+    /**
+     * searchAudioProductByName: search for a audioProduct by name.
+     * @param nameProduct: String=> it the name of the audioProduct. 
+     * @return posNameProd: int=> audioProduct position in array list.
+     */
     public int searchAudioProductByName(String nameProduct){
         int posNameProd=-1;
         boolean isFound=false;
