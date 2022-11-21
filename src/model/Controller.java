@@ -1,12 +1,16 @@
 package model;
 
 import java.util.ArrayList;
+
+import org.w3c.dom.NameList;
+
 import java.lang.annotation.Retention;
 import java.time.LocalTime;
 
 public class Controller{
     private ArrayList<Users> users;
     private ArrayList<Products> products;
+    private int reproductionQuantityProgram;
 
     /**
      * Controller: is the constructor of the class Controller tha contain the arrayslist of product and users
@@ -14,6 +18,7 @@ public class Controller{
     public Controller(){
         users = new ArrayList<Users>(10);
         products = new ArrayList<Products>(10);
+        reproductionQuantityProgram=0;
     }
 
     /**
@@ -44,6 +49,14 @@ public class Controller{
      */
     public void setProducts(ArrayList<Products> products) {
         this.products = products;
+    }
+
+    public int getReproductionQuantityProgram() {
+        return reproductionQuantityProgram;
+    }
+
+    public void setReproductionQuantityProgram(int reproductionQuantityProgram) {
+        this.reproductionQuantityProgram += reproductionQuantityProgram;
     }
 
     //-----------------------------------------------------------
@@ -176,12 +189,13 @@ public class Controller{
      * @param nameList: String=> name of the playList.
      * @return msj: String=> confirmatio message.
      */
-    public String createPlayListToUs(String idUs, String nameList){
+    public String createPlayListToUs(String idUs, String nameList, int typePlaylistSelection){
         String msj="";
         int posIdUs=searchUserById(idUs);
+        
         if(posIdUs!=-1){
             if(users.get(posIdUs) instanceof Consumers){
-                PlayList newPlayList = new PlayList(nameList);
+                PlayList newPlayList = new PlayList(nameList, typePlaylistSelection);
                 if(users.get(posIdUs) instanceof Standart){
                     msj=((Standart)(users.get(posIdUs))).addPlaylistStandart(newPlayList);
                 }else if(users.get(posIdUs) instanceof Premium){
@@ -396,6 +410,156 @@ public class Controller{
         }
         return posNameProd;
     }
+
+    /**
+     * sharePlaylistMatrix: share the playlist matrix code
+     * @param idUs: String=> is the id of the user
+     * @param nameList: String=> is the name of the list.
+     * @return msj: String=> confirmation message.
+     */
+    public String sharePlaylistMatrix(String idUs, String nameList){
+        String msj="";
+        int posUser=searchUserById(idUs);
+        if(posUser!=1){
+            int posList=searchPlayListByName(idUs, nameList);
+            if(posList!=1){
+                for(int i=0; i<6; i++){
+                    for(int j=0; j<6; j++){
+                        msj+=(((Standart)(users.get(posUser))).getPlayLists().get(posList).getMatrixCode()[i][j])+ " ";
+                    }
+                    msj+="\n";
+                }
+            }
+            
+        }
+        return msj;
+    }
+
+    /**
+     * sharePlaylistCode: show the code of the playlist
+     * @param idUs: String=> is the id of the user
+     * @param nameList: String=> is the name of the list.
+     * @return msj: String=> confirmation message.
+     */
+    public String sharePlaylistCode(String idUs, String nameList){
+        String msj="";
+        int posUser=searchUserById(idUs);
+        if(posUser!=1){
+            int posList=searchPlayListByName(idUs, nameList);
+            if(posList!=1){
+                msj=(((Standart)(users.get(posUser))).getPlayLists().get(posList).getIdList()); 
+            }
+            
+        }
+        return msj;
+    }
+
+    /**
+     * playAudio: play an sepecific audio product
+     * @param idUs: String=> is the id of the user
+     * @param nameList: String=> is the name of the list.
+     * @return msj: String=> confirmation message.
+     */
+    public String playAudio(String idUs, String nameProduct){
+        String msj="";
+        int counter=1;
+        int posIdUs=searchUserById(idUs);
+        if(posIdUs!=-1){
+            int posProduct=searchAudioProductByName(nameProduct);
+            if(posProduct!=-1){
+                String idOwner= products.get(posProduct).getIdOwner();
+                int posProducer=searchUserById(idOwner);
+                if(posProducer!=-1){
+                    setReproductionQuantityProgram(counter);
+                    products.get(posProduct).setReproductionNumber(counter);
+                    ((Consumers)(users.get(posIdUs))).setReproductionQuantityConsumer(counter);
+                    ((Producers)(users.get(posProducer))).setReproductionQuantityProducer(counter);
+                    if(users.get(posIdUs) instanceof Standart){
+                        msj=playAudioStandart(posProduct);
+                    }
+                    if(users.get(posProducer) instanceof Premium){
+                        msj=playAudioPremium(posProduct);
+                    }
+                    
+                }
+            }
+        }
+        return msj;
+    }
+    /**
+     * playAudioStandart: play an audio for standart users
+     * @param posProduct: int=> is the position of the product in the array
+     * @return msj: String=> confirmation message.
+     */
+    public String playAudioStandart(int posProduct){
+        String msj="";
+        int counterPlay=products.get(posProduct).getCounterPlay();
+        if(counterPlay<=2){
+            if(products.get(posProduct) instanceof Songs){
+                msj=((Songs)(products.get(posProduct))).playSong();  
+            }
+            if(products.get(posProduct) instanceof Podcasts){
+                msj=((Podcasts)(products.get(posProduct))).playPodCast();  
+            }
+            counterPlay+=1;
+            products.get(posProduct).setCounterPlay(counterPlay);
+            
+        }
+        if(counterPlay==3){
+            if(products.get(posProduct) instanceof Songs){
+                msj=((Songs)(products.get(posProduct))).playSong();  
+            }
+            if(products.get(posProduct) instanceof Podcasts){
+                msj=((Podcasts)(products.get(posProduct))).playPodCast();  
+            }
+            counterPlay=1;
+            products.get(posProduct).setCounterPlay(counterPlay);
+            
+        }
+
+        return msj;
+    }
+
+    /**
+     * playAudioPremium: play an audio for premium users
+     * @param posProduct: int=> is the position of the product in the array
+     * @return msj: String=> confirmation message.
+     */
+    public String playAudioPremium(int posProduct){
+        String msj="";
+            if(products.get(posProduct) instanceof Songs){
+                msj=((Songs)(products.get(posProduct))).playSong();  
+            }
+            if(products.get(posProduct) instanceof Podcasts){
+                msj=((Podcasts)(products.get(posProduct))).playPodCast();  
+            }
+        return msj;
+    }
+
+
+
+    /**
+     * buySong: buy an specific song
+      * @param idUs: String=> is the id of the user
+     * @param nameProduct: String=> is the name of the audio.
+     * @return msj: String=> confirmation message.
+     */
+    public String buySong(String idUs, String nameProduct){
+        String msj="";
+        int posIdUs=searchUserById(idUs);
+        if(posIdUs!=-1){
+            int posProduct=searchAudioProductByName(nameProduct);
+            if(posProduct!=-1){
+                String idOwner= products.get(posProduct).getIdOwner();
+                int posProducer=searchUserById(idOwner);
+                if(posProducer!=-1){
+                    msj=(((Songs)(products.get(posProduct))).buySong());
+                }
+            }
+        }
+        return msj;
+    }
+
 
 
    

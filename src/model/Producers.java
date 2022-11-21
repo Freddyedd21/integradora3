@@ -72,7 +72,7 @@ public abstract class Producers extends Users{
      * @param reproductionQuantityProducer: int=> is the new reproduction quantity of the producer.
      */
     public void setReproductionQuantityProducer(int reproductionQuantityProducer) {
-        this.reproductionQuantityProducer = reproductionQuantityProducer;
+        this.reproductionQuantityProducer += reproductionQuantityProducer;
     }
 
     //-----------------------------------------------------------

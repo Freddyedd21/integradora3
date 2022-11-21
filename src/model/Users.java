@@ -6,6 +6,7 @@ public abstract class Users{
     private String nickNameUs;
     private String idUs;
     private LocalDate dateUs;
+ 
 
     /**
      * Users: is the constructor of the class

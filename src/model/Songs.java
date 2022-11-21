@@ -2,7 +2,7 @@ package model;
 
 
 
-public class Songs extends Products{
+public class Songs extends Products implements PlaySong, BuySong{
     private String album;
     private MusicGender gender;
     private double saleValue;
@@ -112,4 +112,39 @@ public class Songs extends Products{
     public void setNumberSales(int numberSales) {
         this.numberSales = numberSales;
     }
+    /* (non-Javadoc)
+     * @see model.PlaySong#playSong()
+     */
+    @Override
+    public String playSong(){
+        String msj="song played";
+        return msj;
+    }
+    @Override
+    public String playAd(){
+        String msj="";
+        int choose=(int)(Math.random()*4);
+        Ad adChoosed=Ad.COCA_COLA_OPEN_HAPPINESS;
+        switch(choose){
+            case 0:
+                adChoosed=Ad.COCA_COLA_OPEN_HAPPINESS;
+                msj="COCA_COLA_OPEN_HAPPINESS";
+            break;
+            case 1:
+                adChoosed=Ad.MM_MELTS_IN_YOUR_MOUTH_NOT_IN_YOUR_HANDS;
+                msj="MM_MELTS_IN_YOUR_MOUTH_NOT_IN_YOUR_HANDS";
+            break;
+            case 2:
+                adChoosed=Ad.NIKE_JUST_DO_IT;
+                msj="NIKE_JUST_DO_IT";
+            break;
+            
+        }
+        return msj;
+    }
+    @Override
+    public String buySong(){
+        String msj="song bought";
+        return msj;
+    } 
 }

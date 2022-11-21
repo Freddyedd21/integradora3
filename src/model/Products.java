@@ -4,12 +4,13 @@ package model;
 
 import java.time.LocalTime;
 
-public abstract class Products{
+public abstract class Products {
     private String nameProduct;
     private String idOwner;
     private String url;
     private LocalTime duration;
-    private int reproductionNumber;
+    private int reproductionNumber=0;
+    private int counterPlay;
     
 
     /**
@@ -28,6 +29,7 @@ public abstract class Products{
         this.url=url;
         this.duration= LocalTime.of(hours, minutes, second);
         this.reproductionNumber=reproductionNumber;
+        this.counterPlay=1;
     }
 
     /**
@@ -52,7 +54,7 @@ public abstract class Products{
      * getNameOwner: get the id of the owner of the audio product.
      * @return idOwner: String=> is the id of the owner of the audio product.
      */
-    public String getNameOwner() {
+    public String getIdOwner() {
         return idOwner;
     }
 
@@ -60,7 +62,7 @@ public abstract class Products{
      * setNameOwner: set the id of the owner of the audio product.
      * @param idOwner: String=> is the new id of the owner of the audio product.
      */
-    public void setNameOwner(String idOwner) {
+    public void setIdOwner(String idOwner) {
         this.idOwner = idOwner;
     }
 
@@ -112,7 +114,19 @@ public abstract class Products{
      * @param reproductionNumber: int=> is the new reproduction number of the audio product.
      */
     public void setReproductionNumber(int reproductionNumber) {
-        this.reproductionNumber = reproductionNumber;
+        this.reproductionNumber += reproductionNumber;
     }
+
+    public int getCounterPlay() {
+        return counterPlay;
+    }
+
+    public void setCounterPlay(int counterPlay) {
+        this.counterPlay = counterPlay;
+    }
+
+   
+
+    
 
 }

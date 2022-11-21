@@ -6,6 +6,7 @@ import java.time.LocalTime;
 public abstract class Consumers extends Users{
     
     private LocalTime reproducingTimeConsumer;
+    private int reproductionQuantityConsumer;
     private String mostListenedGender;
     private String mostListenedArtist;
 
@@ -24,6 +25,7 @@ public abstract class Consumers extends Users{
     public Consumers(String nickNameUs, String idUs, int hours, int minutes, int second, String mostListenedGender, String mostListenedArtist){
         super(nickNameUs, idUs);
         this.reproducingTimeConsumer = LocalTime.of(hours, minutes, second);
+        this.reproductionQuantityConsumer= 0;
         this.mostListenedGender=mostListenedGender;
         this.mostListenedArtist=mostListenedArtist;
     }
@@ -75,6 +77,13 @@ public abstract class Consumers extends Users{
      */
     public void setMostListenedArtist(String mostListenedArtist) {
         this.mostListenedArtist = mostListenedArtist;
+    }
+    public int getReproductionQuantityConsumer() {
+        return reproductionQuantityConsumer;
+    }
+
+    public void setReproductionQuantityConsumer(int reproductionQuantityConsumer) {
+        this.reproductionQuantityConsumer += reproductionQuantityConsumer;
     }
 
 

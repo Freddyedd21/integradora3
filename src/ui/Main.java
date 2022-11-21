@@ -1,6 +1,9 @@
 package ui;
 
 import java.util.Scanner;
+
+import org.w3c.dom.NameList;
+
 import model.Controller;
 
 public class Main{
@@ -67,6 +70,10 @@ public class Main{
         "3. create song and podcast \n" +
         "4. create a user play list \n"+
         "5. edit user play list \n"+
+        "6. share playlist code \n"+
+        "7. play an audio \n"+
+        "8. buy a song \n"+
+        "9. inform option \n"+
         "0. exit program";
     
     }
@@ -129,9 +136,9 @@ public class Main{
         //tools time change
         int hours=0; int minutes=0; int second=0; 
         //usuary params
-        String nickNameUs=""; String idUs=""; String nameProducer=""; String URLproducer=""; 
+        String nickNameUs=""; String idUs="";  
         //producer params
-        int reproductionQuantityProducer=0; 
+        String nameProducer=""; String URLproducer=""; int reproductionQuantityProducer=0; 
         //consumer params
         String mostListenedGender=""; String mostListenedArtist="";
         //consumer standart param
@@ -143,7 +150,7 @@ public class Main{
         //podCast param
         String description=""; int podcastsCategorySelection=0;
         //playList param
-        String nameList="";
+        String nameList=""; int typePlaylistSelection=0;
 
         switch(option){
             case 1: 
@@ -159,10 +166,22 @@ public class Main{
             break;
 
             case 4:
-                case4(msj, idUs, nameList, counter);
+                case4(msj, idUs, nameList, typePlaylistSelection, counter);
             break;
             case 5:
                 case5(msj, idUs, counter, nameList, choose, nameProduct, idOwner);
+            break;
+            case 6:
+                case6(msj, idUs, nameList, counter, choose);
+            break;
+            case 7:
+                case7(msj, idUs, nameProduct, counter);
+            break;
+            case 8:
+                case8(msj, idUs, nameProduct, counter);
+            break;
+            case 9:
+                case9(msj, choose);
             break;
             case 0: 
                 System.out.println("Exit program.");
@@ -432,15 +451,26 @@ public class Main{
      * @param nameList: String=> name of the playList.
      * @param counter: int=> validation tool.
      */
-    public void case4(String msj, String idUs, String nameList, int counter){
+    public void case4(String msj, String idUs, String nameList, int typePlaylistSelection, int counter){
         msj="";
         System.out.println("type the name of the play list");
         nameList=reader.next();
+
+        do{
+            System.out.println("select the type of the playlist\n"+
+           "1)SONG\n"+ 
+           "2)PODCAST\n"+
+           "3)BOTH\n");
+            typePlaylistSelection=validateIntegerOption();
+            if(typePlaylistSelection!=1 && typePlaylistSelection!=2 && typePlaylistSelection!=3){
+             System.out.println("invalid option try again");
+            }
+        }while(typePlaylistSelection!=1 && typePlaylistSelection!=2 && typePlaylistSelection!=3);
         System.out.println("type the id of the consumer you want to add the list to");
         idUs=reader.next();
         counter=controller.searchPlayListByName(idUs, nameList);
         if(counter==-1){
-            msj=controller.createPlayListToUs(idUs, nameList);
+            msj=controller.createPlayListToUs(idUs, nameList, typePlaylistSelection);
            System.out.println(msj);
         }else{
             System.out.println("the name of the play list is already used");
@@ -534,6 +564,132 @@ public class Main{
         }else{
             System.out.println("user id not found");
         }
+    }
+
+    /**
+     * case6: share playlist
+     * @param msj: String=> method confirmation message.
+     * @param idUs: String=> is the id of the user
+     * @param nameList: String=> is the name of the list.
+     * @param counter: int=> validation tool.
+     * @param choose: int=> selecton tool.
+     */
+    public void case6 (String msj, String idUs, String nameList, int counter, int choose){
+        System.out.println("type the id of the owner of the playlist");
+        idUs=reader.next();
+        counter=controller.searchUserById(idUs);
+        if(counter!=-1){
+            counter=controller.verifyConsumerByid(idUs);
+            if(counter==1){
+                System.out.println("type the name of the playlist");
+                nameList=reader.next();
+                counter=controller.searchPlayListByName(idUs, nameList);
+                if(counter!=-1){
+                    System.out.println("this is the matrix of the plylist");
+                    msj=controller.sharePlaylistMatrix(idUs, nameList);
+                    System.out.println(msj);
+                    System.out.println("this is the final code of the playlist");
+                    msj=controller.sharePlaylistCode(idUs, nameList);
+                    System.out.println(msj);
+
+                }else{
+                    System.out.println("this list does not exist");
+                }
+            }else{
+                System.out.println("this id doesnt match that of a consumer");
+            }
+        }else{
+            System.out.println("user not found");
+        }
+    }
+
+    /**
+     * case7: reproduce song
+     * @param msj: String=> method confirmation message.
+     * @param idUs: String=> is the id of the user
+     * @param nameList: String=> is the name of the list.
+     * @param counter: int=> validation tool.
+     */
+    public void case7(String msj, String idUs, String nameProduct, int counter){
+        System.out.println("type the id of the user consumer to reproduce the song");
+        idUs=reader.next();
+        counter=controller.searchUserById(idUs);
+        if(counter!=-1){
+            counter=controller.verifyConsumerByid(idUs);
+            if(counter==1){
+                System.out.println("type the name of the audio to reproduce");
+                nameProduct=reader.next();
+                counter=controller.searchAudioProductByName(nameProduct);
+                if(counter!=-1){
+                    msj=controller.playAudio(idUs, nameProduct);
+                    System.out.println(msj);
+                }else{
+                    System.out.println("the name of the audio was not found");
+                }
+            }else{
+                System.out.println("this id doesnt match that of a consumer"); 
+            }
+        }else{
+            System.out.println("user not found");
+        }
+    }
+
+    /**
+     * case8: buy a song
+     * @param msj: String=> method confirmation message.
+     * @param idUs: String=> is the id of the user
+     * @param nameList: String=> is the name of the list.
+     * @param counter: int=> validation tool.
+     */
+    public void case8(String msj, String idUs, String nameProduct, int counter){
+        System.out.println("type the id of the user consumer to buy the song");
+        idUs=reader.next();
+        counter=controller.searchUserById(idUs);
+        if(counter!=-1){
+            counter=controller.verifyConsumerByid(idUs);
+            if(counter==1){
+                System.out.println("type the name of the song to buy");
+                nameProduct=reader.next();
+                counter=controller.searchAudioProductByName(nameProduct);
+                if(counter!=-1){
+                    counter=controller.verifyAudioProductByName(nameProduct);
+                    if(counter==1){
+                        msj=controller.buySong(idUs, nameProduct);
+                        System.out.println(msj);
+                    }else{
+                        System.out.println("the name does not match to a song");
+                    }
+                }else{
+                    System.out.println("the name of the audio was not found");
+                }
+            }else{
+                System.out.println("this id doesnt match that of a consumer"); 
+            }
+        }else{
+            System.out.println("user not found");
+        }
+    }
+
+    public void case9 (String msj, int choose){
+        
+        do{
+            System.out.println("type the option do you want to see");
+            System.out.println("1. show total reproduction number \n"+
+            "2. ");
+            choose=validateIntegerOption();
+            if(choose!=1){
+                System.out.println("invalid option"); 
+            }
+        }while(choose!=1);
+        switch(choose){
+            case 1:
+               msj="the number of total reproduction in all the plataform is: "+ controller.getReproductionQuantityProgram();
+               System.out.println(msj);
+            break;
+            case 2:
+
+        }
+        
     }
     
 

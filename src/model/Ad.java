@@ -1,0 +1,6 @@
+package model;
+
+public enum Ad{
+    NIKE_JUST_DO_IT, COCA_COLA_OPEN_HAPPINESS, MM_MELTS_IN_YOUR_MOUTH_NOT_IN_YOUR_HANDS  
+
+}

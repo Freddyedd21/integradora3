@@ -3,7 +3,7 @@ package model;
 
 
 
-public class Podcasts extends Products{
+public class Podcasts extends Products implements PlayPodCast{
     private String description;
     private int podcastsCategorySelection;
     private PostCastCategories category;
@@ -75,5 +75,32 @@ public class Podcasts extends Products{
         this.category = category;
     }
     
+    @Override
+    public String playPodCast(){
+        String msj="podcast played";
+        return msj;
+    }
+    @Override
+    public String playAd(){
+        String msj="";
+        int choose=(int)(Math.random()*4);
+        Ad adChoosed=Ad.COCA_COLA_OPEN_HAPPINESS;
+        switch(choose){
+            case 0:
+                adChoosed=Ad.COCA_COLA_OPEN_HAPPINESS;
+                msj="COCA_COLA_OPEN_HAPPINESS";
+            break;
+            case 1:
+                adChoosed=Ad.MM_MELTS_IN_YOUR_MOUTH_NOT_IN_YOUR_HANDS;
+                msj="MM_MELTS_IN_YOUR_MOUTH_NOT_IN_YOUR_HANDS";
+            break;
+            case 2:
+                adChoosed=Ad.NIKE_JUST_DO_IT;
+                msj="NIKE_JUST_DO_IT";
+            break;
+            
+        }
+        return msj;
+    }
     
 }
